@@ -595,6 +595,7 @@ function addCSSAnimation() {
     const circle = document.getElementById('cssCircle');
     const duration = document.getElementById('durationSlider').value;
     circle.style.transformOrigin = 'center';
+    circle.style.transformBox = 'fill-box';  // ADD THIS LINE
     circle.style.animation = `spin ${duration}s linear infinite`;
     cssAnimationActive = true;
 }
@@ -631,10 +632,14 @@ function wapiStart() {
         wapiAnimation.cancel();
     }
 
+    // FIX: Use transform instead of cx/cy
+    circle.style.transformBox = 'fill-box';
+    circle.style.transformOrigin = 'center';
+    
     wapiAnimation = circle.animate([
-        { cx: '50', cy: '100' },
-        { cx: '200', cy: '70' },
-        { cx: '350', cy: '100' }
+        { transform: 'translate(0px, 0px)' },
+        { transform: 'translate(150px, -30px)' },
+        { transform: 'translate(300px, 0px)' }
     ], {
         duration: 3000,
         iterations: Infinity,
@@ -644,7 +649,6 @@ function wapiStart() {
 
     updateWapiStatus();
 }
-
 function wapiPause() {
     if (wapiAnimation) {
         wapiAnimation.pause();
