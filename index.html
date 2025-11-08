@@ -1,0 +1,1063 @@
+Publish the website 
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Animation Control with JavaScript</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 0.5rem;
+        font-size: 2.5rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .subtitle {
+        text-align: center;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+    }
+
+    .demo-section {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .demo-section h2 {
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .demo-section p {
+        margin-bottom: 1rem;
+        opacity: 0.9;
+        line-height: 1.6;
+    }
+
+    .svg-container {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 250px;
+    }
+
+    .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .btn:active {
+        transform: translateY(0);
+    }
+
+    .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .input-group label {
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .input-group input[type="range"] {
+        width: 100%;
+        height: 6px;
+        border-radius: 5px;
+        background: rgba(255, 255, 255, 0.2);
+        outline: none;
+    }
+
+    .input-group input[type="range"]::-webkit-slider-thumb {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: white;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    .input-group input[type="number"],
+    .input-group input[type="text"],
+    .input-group input[type="color"],
+    .input-group select {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 0.5rem;
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+
+    .value-display {
+        font-size: 0.85rem;
+        opacity: 0.8;
+    }
+
+    .code-section {
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 10px;
+        padding: 1rem;
+        margin-top: 1rem;
+        overflow-x: auto;
+    }
+
+    .code-section pre {
+        margin: 0;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        color: #a8dadc;
+    }
+
+    .info-box {
+        background: rgba(33, 150, 243, 0.2);
+        border-left: 4px solid #2196F3;
+        padding: 1rem;
+        border-radius: 5px;
+        margin-top: 1rem;
+    }
+
+    svg {
+        max-width: 100%;
+        height: auto;
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .status-indicator {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #4CAF50;
+        animation: pulse 2s infinite;
+        margin-right: 0.5rem;
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 SVG Animation Control with JavaScript</h1>
+        <p class="subtitle">Complete examples of controlling all SVG animation types</p>
+
+```
+    <!-- 1. SMIL Animation Control -->
+    <div class="demo-section">
+        <h2>1. SMIL Animation Control</h2>
+        <p>Control native SVG &lt;animate&gt; elements using JavaScript methods</p>
+        
+        <div class="svg-container">
+            <svg width="400" height="200" viewBox="0 0 400 200">
+                <circle id="smilCircle" cx="50" cy="100" r="30" fill="#FF6B6B">
+                    <animate id="smilAnim"
+                        attributeName="cx"
+                        from="50"
+                        to="350"
+                        dur="3s"
+                        begin="indefinite"
+                        fill="freeze"/>
+                </circle>
+            </svg>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="smilStart()">▶ Start</button>
+            <button class="btn" onclick="smilPause()">⏸ Pause</button>
+            <button class="btn" onclick="smilResume()">▶ Resume</button>
+            <button class="btn" onclick="smilEnd()">⏹ End</button>
+            <button class="btn" onclick="smilRestart()">🔄 Restart</button>
+        </div>
+
+        <div class="code-section">
+            <pre>// SMIL Animation Methods
+```
+
+const anim = document.getElementById(‘smilAnim’);
+anim.beginElement();      // Start animation
+anim.endElement();        // End animation
+
+const circle = document.getElementById(‘smilCircle’);
+circle.pauseAnimations();   // Pause
+circle.unpauseAnimations(); // Resume</pre>
+</div>
+</div>
+
+```
+    <!-- 2. Direct Attribute Manipulation -->
+    <div class="demo-section">
+        <h2>2. Direct Attribute Manipulation</h2>
+        <p>Animate by directly changing SVG attributes with JavaScript</p>
+        
+        <div class="svg-container">
+            <svg width="400" height="200" viewBox="0 0 400 200">
+                <rect id="directRect" x="10" y="75" width="60" height="50" fill="#4ECDC4" rx="5"/>
+            </svg>
+        </div>
+
+        <div class="controls">
+            <div class="input-group">
+                <label>X Position: <span id="xValue">10</span></label>
+                <input type="range" id="xSlider" min="0" max="340" value="10" oninput="updateX(this.value)">
+            </div>
+            <div class="input-group">
+                <label>Width: <span id="widthValue">60</span></label>
+                <input type="range" id="widthSlider" min="20" max="200" value="60" oninput="updateWidth(this.value)">
+            </div>
+            <div class="input-group">
+                <label>Color:</label>
+                <input type="color" id="colorPicker" value="#4ECDC4" oninput="updateColor(this.value)" style="width: 100%; height: 40px;">
+            </div>
+            <button class="btn" onclick="animateRect()">🎬 Animate</button>
+        </div>
+
+        <div class="code-section">
+            <pre>// Direct attribute manipulation
+```
+
+const rect = document.getElementById(‘directRect’);
+rect.setAttribute(‘x’, 100);
+rect.setAttribute(‘fill’, ‘#FF6B6B’);</pre>
+</div>
+</div>
+
+```
+    <!-- 3. CSS Animations -->
+    <div class="demo-section">
+        <h2>3. CSS Animation Control</h2>
+        <p>Control CSS animations applied to SVG elements</p>
+        
+        <div class="svg-container">
+            <svg width="400" height="200" viewBox="0 0 400 200">
+                <circle id="cssCircle" cx="200" cy="100" r="40" fill="#95E1D3"/>
+            </svg>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="addCSSAnimation()">▶ Add Animation</button>
+            <button class="btn" onclick="pauseCSSAnimation()">⏸ Pause</button>
+            <button class="btn" onclick="resumeCSSAnimation()">▶ Resume</button>
+            <button class="btn" onclick="removeCSSAnimation()">⏹ Remove</button>
+            <div class="input-group">
+                <label>Duration: <span id="durationValue">2</span>s</label>
+                <input type="range" id="durationSlider" min="0.5" max="5" step="0.5" value="2" oninput="updateDuration(this.value)">
+            </div>
+        </div>
+
+        <div class="code-section">
+            <pre>// CSS Animation Control
+```
+
+element.style.animation = ‘spin 2s linear infinite’;
+element.style.animationPlayState = ‘paused’;
+element.style.animationPlayState = ‘running’;
+element.style.animation = ‘none’;</pre>
+</div>
+</div>
+
+```
+    <!-- 4. Web Animations API -->
+    <div class="demo-section">
+        <h2>4. Web Animations API (Modern)</h2>
+        <p>The most powerful and flexible way to control animations</p>
+        
+        <div class="svg-container">
+            <svg width="400" height="200" viewBox="0 0 400 200">
+                <path id="wapiPath" d="M 50,100 Q 200,50 350,100" stroke="#FFD93D" stroke-width="3" fill="none"/>
+                <circle id="wapiCircle" cx="50" cy="100" r="15" fill="#FFD93D"/>
+            </svg>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="wapiStart()">▶ Play</button>
+            <button class="btn" onclick="wapiPause()">⏸ Pause</button>
+            <button class="btn" onclick="wapiReverse()">◀ Reverse</button>
+            <button class="btn" onclick="wapiCancel()">⏹ Cancel</button>
+            <button class="btn" onclick="wapiFinish()">⏭ Finish</button>
+            <div class="input-group">
+                <label>Speed: <span id="speedValue">1</span>x</label>
+                <input type="range" id="speedSlider" min="0.25" max="3" step="0.25" value="1" oninput="updateSpeed(this.value)">
+            </div>
+        </div>
+
+        <div class="info-box">
+            <strong>Animation State:</strong> <span id="wapiStatus">Ready</span>
+        </div>
+
+        <div class="code-section">
+            <pre>// Web Animations API
+```
+
+const animation = element.animate([
+{ transform: ‘translateX(0)’ },
+{ transform: ‘translateX(300px)’ }
+], { duration: 2000, iterations: Infinity });
+
+animation.play();
+animation.pause();
+animation.reverse();
+animation.playbackRate = 2;</pre>
+</div>
+</div>
+
+```
+    <!-- 5. Transform Control -->
+    <div class="demo-section">
+        <h2>5. Transform Control</h2>
+        <p>Manipulate SVG transforms programmatically</p>
+        
+        <div class="svg-container">
+            <svg width="400" height="200" viewBox="0 0 400 200">
+                <rect id="transformRect" x="175" y="75" width="50" height="50" fill="#F38181" rx="5"/>
+            </svg>
+        </div>
+
+        <div class="controls">
+            <div class="input-group">
+                <label>Rotate: <span id="rotateValue">0</span>°</label>
+                <input type="range" id="rotateSlider" min="0" max="360" value="0" oninput="updateRotate(this.value)">
+            </div>
+            <div class="input-group">
+                <label>Scale: <span id="scaleValue">1</span></label>
+                <input type="range" id="scaleSlider" min="0.5" max="3" step="0.1" value="1" oninput="updateScale(this.value)">
+            </div>
+            <div class="input-group">
+                <label>Translate X: <span id="translateValue">0</span></label>
+                <input type="range" id="translateSlider" min="-100" max="100" value="0" oninput="updateTranslate(this.value)">
+            </div>
+            <button class="btn" onclick="animateTransform()">🌀 Animate All</button>
+        </div>
+
+        <div class="code-section">
+            <pre>// Transform manipulation
+```
+
+element.style.transform = ‘rotate(45deg)’;
+element.style.transform = ‘scale(2)’;
+element.style.transform = ‘translate(50px, 20px)’;
+element.style.transformOrigin = ‘50% 50%’;</pre>
+</div>
+</div>
+
+```
+    <!-- 6. Path Animation -->
+    <div class="demo-section">
+        <h2>6. Path Animation (AnimateMotion)</h2>
+        <p>Animate elements along custom paths</p>
+        
+        <div class="svg-container">
+            <svg width="400" height="200" viewBox="0 0 400 200">
+                <path id="motionPath" d="M 50,100 Q 200,30 350,100 Q 200,170 50,100 Z" 
+                      stroke="rgba(255,255,255,0.3)" stroke-width="2" fill="none"/>
+                <circle id="pathCircle" r="12" fill="#6C5CE7">
+                    <animateMotion id="motionAnim" dur="4s" begin="indefinite" fill="freeze">
+                        <mpath href="#motionPath"/>
+                    </animateMotion>
+                </circle>
+            </svg>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="pathStart()">▶ Start</button>
+            <button class="btn" onclick="pathPause()">⏸ Pause</button>
+            <button class="btn" onclick="pathResume()">▶ Resume</button>
+            <button class="btn" onclick="pathRestart()">🔄 Restart</button>
+            <button class="btn" onclick="toggleRotate()">🔄 Toggle Rotate</button>
+        </div>
+
+        <div class="code-section">
+            <pre>// Path animation control
+```
+
+<animateMotion dur=“4s” rotate=“auto”>
+<mpath href=”#pathID”/>
+</animateMotion>
+
+const anim = document.getElementById(‘motionAnim’);
+anim.beginElement();</pre>
+</div>
+</div>
+
+```
+    <!-- 7. Multiple Animations -->
+    <div class="demo-section">
+        <h2>7. Coordinated Multiple Animations</h2>
+        <p>Control multiple animations simultaneously</p>
+        
+        <div class="svg-container">
+            <svg width="400" height="200" viewBox="0 0 400 200">
+                <g id="multiGroup">
+                    <circle cx="100" cy="100" r="20" fill="#FF6B6B"/>
+                    <circle cx="200" cy="100" r="20" fill="#4ECDC4"/>
+                    <circle cx="300" cy="100" r="20" fill="#95E1D3"/>
+                </g>
+            </svg>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="multiStart()">▶ Start All</button>
+            <button class="btn" onclick="multiPause()">⏸ Pause All</button>
+            <button class="btn" onclick="multiStagger()">⚡ Stagger</button>
+            <button class="btn" onclick="multiSequence()">📋 Sequence</button>
+            <button class="btn" onclick="multiCancel()">⏹ Cancel All</button>
+        </div>
+
+        <div class="code-section">
+            <pre>// Multiple animations
+```
+
+const circles = document.querySelectorAll(’#multiGroup circle’);
+circles.forEach((circle, i) => {
+circle.animate([…], {
+delay: i * 200,
+duration: 1000
+});
+});</pre>
+</div>
+</div>
+
+```
+    <!-- 8. Dynamic Animation Creation -->
+    <div class="demo-section">
+        <h2>8. Dynamic Animation Creation</h2>
+        <p>Create and modify animations on the fly</p>
+        
+        <div class="svg-container">
+            <svg id="dynamicSVG" width="400" height="200" viewBox="0 0 400 200">
+                <!-- Elements added dynamically -->
+            </svg>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="addShape('circle')">➕ Add Circle</button>
+            <button class="btn" onclick="addShape('rect')">➕ Add Rectangle</button>
+            <button class="btn" onclick="animateAll()">🎬 Animate All</button>
+            <button class="btn" onclick="clearShapes()">🗑️ Clear All</button>
+            <div class="input-group">
+                <label>Animation Type:</label>
+                <select id="animType">
+                    <option value="bounce">Bounce</option>
+                    <option value="fade">Fade</option>
+                    <option value="spin">Spin</option>
+                    <option value="scale">Scale</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="code-section">
+            <pre>// Dynamic creation
+```
+
+const circle = document.createElementNS(
+‘http://www.w3.org/2000/svg’, ‘circle’
+);
+circle.setAttribute(‘cx’, x);
+svg.appendChild(circle);
+circle.animate([…], {…});</pre>
+</div>
+</div>
+
+```
+</div>
+
+<script>
+
+// Global animation references
+let wapiAnimation = null;
+let cssAnimationActive = false;
+let multiAnimations = [];
+let dynamicShapes = [];
+let dynamicAnimations = [];
+let rotateEnabled = false;
+
+// 1. SMIL Animation Control
+function smilStart() {
+    const anim = document.getElementById('smilAnim');
+    anim.beginElement();
+}
+
+function smilPause() {
+    const svg = document.getElementById('smilCircle').ownerSVGElement;
+    svg.pauseAnimations();
+}
+
+function smilResume() {
+    const svg = document.getElementById('smilCircle').ownerSVGElement;
+    svg.unpauseAnimations();
+}
+
+function smilEnd() {
+    const anim = document.getElementById('smilAnim');
+    anim.endElement();
+}
+
+function smilRestart() {
+    const circle = document.getElementById('smilCircle');
+    const anim = document.getElementById('smilAnim');
+    circle.setAttribute('cx', '50');
+    setTimeout(() => anim.beginElement(), 50);
+}
+
+// 2. Direct Attribute Manipulation
+function updateX(value) {
+    document.getElementById('xValue').textContent = value;
+    document.getElementById('directRect').setAttribute('x', value);
+}
+
+function updateWidth(value) {
+    document.getElementById('widthValue').textContent = value;
+    document.getElementById('directRect').setAttribute('width', value);
+}
+
+function updateColor(value) {
+    document.getElementById('directRect').setAttribute('fill', value);
+}
+
+function animateRect() {
+    const rect = document.getElementById('directRect');
+    let x = 10;
+    const interval = setInterval(() => {
+        x += 5;
+        if (x > 340) {
+            clearInterval(interval);
+            return;
+        }
+        rect.setAttribute('x', x);
+        document.getElementById('xSlider').value = x;
+        document.getElementById('xValue').textContent = x;
+    }, 30);
+}
+
+// 3. CSS Animation Control
+function addCSSAnimation() {
+    const circle = document.getElementById('cssCircle');
+    const duration = document.getElementById('durationSlider').value;
+    circle.style.transformOrigin = 'center';
+    circle.style.animation = `spin ${duration}s linear infinite`;
+    cssAnimationActive = true;
+}
+
+function pauseCSSAnimation() {
+    const circle = document.getElementById('cssCircle');
+    circle.style.animationPlayState = 'paused';
+}
+
+function resumeCSSAnimation() {
+    const circle = document.getElementById('cssCircle');
+    circle.style.animationPlayState = 'running';
+}
+
+function removeCSSAnimation() {
+    const circle = document.getElementById('cssCircle');
+    circle.style.animation = 'none';
+    cssAnimationActive = false;
+}
+
+function updateDuration(value) {
+    document.getElementById('durationValue').textContent = value;
+    if (cssAnimationActive) {
+        const circle = document.getElementById('cssCircle');
+        circle.style.animation = `spin ${value}s linear infinite`;
+    }
+}
+
+// 4. Web Animations API
+function wapiStart() {
+    const circle = document.getElementById('wapiCircle');
+    
+    if (wapiAnimation) {
+        wapiAnimation.cancel();
+    }
+
+    wapiAnimation = circle.animate([
+        { cx: '50', cy: '100' },
+        { cx: '200', cy: '70' },
+        { cx: '350', cy: '100' }
+    ], {
+        duration: 3000,
+        iterations: Infinity,
+        direction: 'alternate',
+        easing: 'ease-in-out'
+    });
+
+    updateWapiStatus();
+}
+
+function wapiPause() {
+    if (wapiAnimation) {
+        wapiAnimation.pause();
+        updateWapiStatus();
+    }
+}
+
+function wapiReverse() {
+    if (wapiAnimation) {
+        wapiAnimation.reverse();
+        updateWapiStatus();
+    }
+}
+
+function wapiCancel() {
+    if (wapiAnimation) {
+        wapiAnimation.cancel();
+        wapiAnimation = null;
+        const circle = document.getElementById('wapiCircle');
+        circle.setAttribute('cx', '50');
+        circle.setAttribute('cy', '100');
+        updateWapiStatus();
+    }
+}
+
+function wapiFinish() {
+    if (wapiAnimation) {
+        wapiAnimation.finish();
+        updateWapiStatus();
+    }
+}
+
+function updateSpeed(value) {
+    document.getElementById('speedValue').textContent = value;
+    if (wapiAnimation) {
+        wapiAnimation.playbackRate = parseFloat(value);
+    }
+}
+
+function updateWapiStatus() {
+    const status = document.getElementById('wapiStatus');
+    if (!wapiAnimation) {
+        status.textContent = 'No animation';
+    } else {
+        status.textContent = `${wapiAnimation.playState} (${wapiAnimation.playbackRate}x)`;
+    }
+}
+
+// 5. Transform Control
+function updateRotate(value) {
+    document.getElementById('rotateValue').textContent = value;
+    applyTransform();
+}
+
+function updateScale(value) {
+    document.getElementById('scaleValue').textContent = value;
+    applyTransform();
+}
+
+function updateTranslate(value) {
+    document.getElementById('translateValue').textContent = value;
+    applyTransform();
+}
+
+function applyTransform() {
+    const rect = document.getElementById('transformRect');
+    const rotate = document.getElementById('rotateSlider').value;
+    const scale = document.getElementById('scaleSlider').value;
+    const translate = document.getElementById('translateSlider').value;
+    rect.style.transformOrigin = 'center';
+    rect.style.transform = `rotate(${rotate}deg) scale(${scale}) translateX(${translate}px)`;
+}
+
+function animateTransform() {
+    const rect = document.getElementById('transformRect');
+    rect.style.transformOrigin = 'center';
+    
+    rect.animate([
+        { transform: 'rotate(0deg) scale(1) translateX(0px)' },
+        { transform: 'rotate(180deg) scale(2) translateX(50px)' },
+        { transform: 'rotate(360deg) scale(1) translateX(0px)' }
+    ], {
+        duration: 2000,
+        iterations: 1
+    });
+}
+
+// 6. Path Animation
+function pathStart() {
+    const anim = document.getElementById('motionAnim');
+    anim.beginElement();
+}
+
+function pathPause() {
+    const svg = document.getElementById('pathCircle').ownerSVGElement;
+    svg.pauseAnimations();
+}
+
+function pathResume() {
+    const svg = document.getElementById('pathCircle').ownerSVGElement;
+    svg.unpauseAnimations();
+}
+
+function pathRestart() {
+    const anim = document.getElementById('motionAnim');
+    const svg = document.getElementById('pathCircle').ownerSVGElement;
+    svg.setCurrentTime(0);
+    anim.beginElement();
+}
+
+function toggleRotate() {
+    const anim = document.getElementById('motionAnim');
+    rotateEnabled = !rotateEnabled;
+    anim.setAttribute('rotate', rotateEnabled ? 'auto' : '0');
+    pathRestart();
+}
+
+// 7. Multiple Animations
+function multiStart() {
+    multiCancel();
+    const circles = document.querySelectorAll('#multiGroup circle');
+    
+    circles.forEach(circle => {
+        const anim = circle.animate([
+            { transform: 'translateY(0)' },
+            { transform: 'translateY(-50px)' }
+        ], {
+            duration: 1000,
+            iterations: Infinity,
+            direction: 'alternate',
+            easing: 'ease-in-out'
+        });
+        multiAnimations.push(anim);
+    });
+}
+
+function multiPause() {
+    multiAnimations.forEach(anim => anim.pause());
+}
+
+function multiStagger() {
+    multiCancel();
+    const circles = document.querySelectorAll('#multiGroup circle');
+    
+    circles.forEach((circle, i) => {
+        const anim = circle.animate([
+            { transform: 'translateY(0) scale(1)' },
+            { transform: 'translateY(-50px) scale(1.5)' }
+        ], {
+            duration: 800,
+            delay: i * 200,
+            iterations: Infinity,
+            direction: 'alternate',
+            easing: 'ease-in-out'
+        });
+        multiAnimations.push(anim);
+    });
+}
+
+function multiSequence() {
+    multiCancel();
+    const circles = document.querySelectorAll('#multiGroup circle');
+    
+    circles.forEach((circle, i) => {
+        setTimeout(() => {
+            const anim = circle.animate([
+                { opacity: 1, transform: 'scale(1)' },
+                { opacity: 0.3, transform: 'scale(2)' },
+                { opacity: 1, transform: 'scale(1)' }
+            ], {
+                duration: 1000,
+                easing: 'ease-in-out'
+            });
+            multiAnimations.push(anim);
+        }, i * 500);
+    });
+}
+
+function multiCancel() {
+    multiAnimations.forEach(anim => anim.cancel());
+    multiAnimations = [];
+}
+
+// 8. Dynamic Animation Creation
+function addShape(type) {
+    const svg = document.getElementById('dynamicSVG');
+    const x = Math.random() * 350 + 25;
+    const y = Math.random() * 150 + 25;
+    const color = `hsl(${Math.random() * 360}, 70%, 60%)`;
+    
+    let shape;
+    if (type === 'circle') {
+        shape = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        shape.setAttribute('cx', x);
+        shape.setAttribute('cy', y);
+        shape.setAttribute('r', 15);
+    } else {
+        shape = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        shape.setAttribute('x', x - 15);
+        shape.setAttribute('y', y - 15);
+        shape.setAttribute('width', 30);
+        shape.setAttribute('height', 30);
+        shape.setAttribute('rx', 5);
+    }
+    
+    shape.setAttribute('fill', color);
+    shape.style.cursor = 'pointer';
+    
+    // Click to remove
+    shape.addEventListener('click', function() {
+        shape.remove();
+        dynamicShapes = dynamicShapes.filter(s => s !== shape);
+    });
+    
+    svg.appendChild(shape);
+    dynamicShapes.push(shape);
+}
+
+function animateAll() {
+    // Cancel existing animations
+    dynamicAnimations.forEach(anim => anim.cancel());
+    dynamicAnimations = [];
+    
+    const animType = document.getElementById('animType').value;
+    
+    dynamicShapes.forEach((shape, i) => {
+        let keyframes, options;
+        
+        switch(animType) {
+            case 'bounce':
+                keyframes = [
+                    { transform: 'translateY(0)' },
+                    { transform: 'translateY(-30px)' },
+                    { transform: 'translateY(0)' }
+                ];
+                options = {
+                    duration: 1000,
+                    delay: i * 100,
+                    iterations: Infinity,
+                    easing: 'cubic-bezier(0.5, 0, 0.5, 1)'
+                };
+                break;
+            
+            case 'fade':
+                keyframes = [
+                    { opacity: 1 },
+                    { opacity: 0.2 },
+                    { opacity: 1 }
+                ];
+                options = {
+                    duration: 1500,
+                    delay: i * 150,
+                    iterations: Infinity
+                };
+                break;
+            
+            case 'spin':
+                shape.style.transformOrigin = 'center';
+                keyframes = [
+                    { transform: 'rotate(0deg)' },
+                    { transform: 'rotate(360deg)' }
+                ];
+                options = {
+                    duration: 2000,
+                    delay: i * 100,
+                    iterations: Infinity,
+                    easing: 'linear'
+                };
+                break;
+            
+            case 'scale':
+                shape.style.transformOrigin = 'center';
+                keyframes = [
+                    { transform: 'scale(1)' },
+                    { transform: 'scale(1.5)' },
+                    { transform: 'scale(1)' }
+                ];
+                options = {
+                    duration: 1200,
+                    delay: i * 120,
+                    iterations: Infinity,
+                    easing: 'ease-in-out'
+                };
+                break;
+        }
+        
+        const anim = shape.animate(keyframes, options);
+        dynamicAnimations.push(anim);
+    });
+}
+
+function clearShapes() {
+    dynamicAnimations.forEach(anim => anim.cancel());
+    dynamicAnimations = [];
+    dynamicShapes.forEach(shape => shape.remove());
+    dynamicShapes = [];
+}
+
+// BONUS: Advanced Animation Techniques
+
+// Chain animations using async/await
+async function chainAnimations(element) {
+    await element.animate([
+        { transform: 'translateX(0)' },
+        { transform: 'translateX(100px)' }
+    ], { duration: 1000, fill: 'forwards' }).finished;
+    
+    await element.animate([
+        { transform: 'translateX(100px) rotate(0deg)' },
+        { transform: 'translateX(100px) rotate(360deg)' }
+    ], { duration: 1000, fill: 'forwards' }).finished;
+    
+    console.log('Animation chain complete!');
+}
+
+// Get all active animations
+function getAllAnimations() {
+    return document.getAnimations();
+}
+
+// Pause all animations on page
+function pauseAllAnimations() {
+    document.getAnimations().forEach(anim => anim.pause());
+}
+
+// Resume all animations
+function resumeAllAnimations() {
+    document.getAnimations().forEach(anim => anim.play());
+}
+
+// Cancel all animations
+function cancelAllAnimations() {
+    document.getAnimations().forEach(anim => anim.cancel());
+}
+
+// Sync multiple animations
+function syncAnimations(elements) {
+    const animations = elements.map(el => 
+        el.animate([
+            { transform: 'scale(1)' },
+            { transform: 'scale(1.5)' },
+            { transform: 'scale(1)' }
+        ], {
+            duration: 1000,
+            iterations: Infinity
+        })
+    );
+    
+    // Start all at exact same time
+    const startTime = document.timeline.currentTime;
+    animations.forEach(anim => anim.startTime = startTime);
+    
+    return animations;
+}
+
+// Create animation timeline
+function createTimeline(element, keyframes, timings) {
+    const animations = [];
+    let totalDelay = 0;
+    
+    keyframes.forEach((kf, i) => {
+        const anim = element.animate(kf, {
+            ...timings[i],
+            delay: totalDelay,
+            fill: 'forwards'
+        });
+        totalDelay += timings[i].duration;
+        animations.push(anim);
+    });
+    
+    return animations;
+}
+
+// Monitor animation events
+function monitorAnimation(animation) {
+    animation.onfinish = () => console.log('Animation finished');
+    animation.oncancel = () => console.log('Animation cancelled');
+    animation.onremove = () => console.log('Animation removed');
+}
+
+// Reverse engineer current animation state
+function getAnimationState(element) {
+    const animations = element.getAnimations();
+    return animations.map(anim => ({
+        playState: anim.playState,
+        currentTime: anim.currentTime,
+        playbackRate: anim.playbackRate,
+        startTime: anim.startTime,
+        progress: (anim.currentTime / anim.effect.getTiming().duration) * 100
+    }));
+}
+
+// Custom easing functions
+const easingFunctions = {
+    easeInOutBack: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+    easeInOutElastic: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+    bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'
+};
+
+// Apply custom easing
+function animateWithCustomEasing(element, easing) {
+    return element.animate([
+        { transform: 'translateY(0)' },
+        { transform: 'translateY(-100px)' }
+    ], {
+        duration: 1000,
+        easing: easingFunctions[easing] || easing,
+        iterations: Infinity,
+        direction: 'alternate'
+    });
+}
+
+</body>
+</html>
