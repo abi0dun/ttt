@@ -204,7 +204,7 @@
         <h1>🎬 SVG Animation Control with JavaScript</h1>
         <p class="subtitle">Complete examples of controlling all SVG animation types</p>
 
-```
+
     <!-- 1. SMIL Animation Control -->
     <div class="demo-section">
         <h2>1. SMIL Animation Control</h2>
@@ -234,7 +234,7 @@
 
         <div class="code-section">
             <pre>// SMIL Animation Methods
-```
+
 
 const anim = document.getElementById(‘smilAnim’);
 anim.beginElement();      // Start animation
@@ -246,7 +246,7 @@ circle.unpauseAnimations(); // Resume</pre>
 </div>
 </div>
 
-```
+
     <!-- 2. Direct Attribute Manipulation -->
     <div class="demo-section">
         <h2>2. Direct Attribute Manipulation</h2>
@@ -276,7 +276,6 @@ circle.unpauseAnimations(); // Resume</pre>
 
         <div class="code-section">
             <pre>// Direct attribute manipulation
-```
 
 const rect = document.getElementById(‘directRect’);
 rect.setAttribute(‘x’, 100);
@@ -284,7 +283,7 @@ rect.setAttribute(‘fill’, ‘#FF6B6B’);</pre>
 </div>
 </div>
 
-```
+
     <!-- 3. CSS Animations -->
     <div class="demo-section">
         <h2>3. CSS Animation Control</h2>
@@ -309,7 +308,7 @@ rect.setAttribute(‘fill’, ‘#FF6B6B’);</pre>
 
         <div class="code-section">
             <pre>// CSS Animation Control
-```
+
 
 element.style.animation = ‘spin 2s linear infinite’;
 element.style.animationPlayState = ‘paused’;
@@ -318,7 +317,7 @@ element.style.animation = ‘none’;</pre>
 </div>
 </div>
 
-```
+
     <!-- 4. Web Animations API -->
     <div class="demo-section">
         <h2>4. Web Animations API (Modern)</h2>
@@ -349,7 +348,7 @@ element.style.animation = ‘none’;</pre>
 
         <div class="code-section">
             <pre>// Web Animations API
-```
+
 
 const animation = element.animate([
 { transform: ‘translateX(0)’ },
@@ -363,7 +362,7 @@ animation.playbackRate = 2;</pre>
 </div>
 </div>
 
-```
+
     <!-- 5. Transform Control -->
     <div class="demo-section">
         <h2>5. Transform Control</h2>
@@ -393,7 +392,7 @@ animation.playbackRate = 2;</pre>
 
         <div class="code-section">
             <pre>// Transform manipulation
-```
+
 
 element.style.transform = ‘rotate(45deg)’;
 element.style.transform = ‘scale(2)’;
@@ -402,7 +401,7 @@ element.style.transformOrigin = ‘50% 50%’;</pre>
 </div>
 </div>
 
-```
+
     <!-- 6. Path Animation -->
     <div class="demo-section">
         <h2>6. Path Animation (AnimateMotion)</h2>
@@ -441,7 +440,7 @@ anim.beginElement();</pre>
 </div>
 </div>
 
-```
+
     <!-- 7. Multiple Animations -->
     <div class="demo-section">
         <h2>7. Coordinated Multiple Animations</h2>
@@ -479,7 +478,7 @@ duration: 1000
 </div>
 </div>
 
-```
+
     <!-- 8. Dynamic Animation Creation -->
     <div class="demo-section">
         <h2>8. Dynamic Animation Creation</h2>
@@ -509,7 +508,7 @@ duration: 1000
 
         <div class="code-section">
             <pre>// Dynamic creation
-```
+
 
 const circle = document.createElementNS(
 ‘http://www.w3.org/2000/svg’, ‘circle’
@@ -520,7 +519,7 @@ circle.animate([…], {…});</pre>
 </div>
 </div>
 
-```
+
 </div>
 
 <script>
